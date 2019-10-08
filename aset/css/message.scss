@@ -1,0 +1,795 @@
+@import "message-variable";
+
+::selection         { background-color: #E13300; color: $white; }
+::-moz-selection    { background-color: #E13300; color: $white; }
+::-webkit-selection { background-color: #E13300; color: $white; }
+::-o-selection      { background-color: #E13300; color: $white; }
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: ''; 
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+html,body{background: linear-gradient(45deg, $hitam 0%, #444 50%);height:100%;width:100%;font-family: 'Muli', sans-serif;}
+
+pre{width:100%;white-space: pre-wrap;       /* CSS 2.1 */
+	white-space: -moz-pre-wrap;  /* Mozilla, 1999 */
+	white-space: -pre-wrap;      /* Opera 4-6 */
+	white-space: -o-pre-wrap;    /* Opera 7 */
+	word-wrap: break-word;  }
+
+.container-chat
+{
+	overflow: hidden;height:100%;
+	.wrap
+	{
+		padding:10px;height: calc(100% - 20px);overflow: hidden;
+		.inner{height:100%;@include border-radius(5px);overflow:hidden;}
+	}
+}
+
+.contact
+{
+	padding:10px;@include transition(.2s ease-out);cursor: default;overflow: hidden;
+	&:hover._u
+	{
+		background: $green;
+		.name, .msg-new{color:$white}
+	}
+	.photo
+	{
+		@include border-radius(100%);
+		display:inline-block;
+		vertical-align: middle;
+		overflow: hidden; 
+		width: 40px;
+		background: $white;
+		border: 1px solid $green;
+		img{width:100%;display:block;} 
+	}
+	.user
+	{
+		display: inline-block;
+		vertical-align: middle;
+		.name
+		{
+			font-weight:bold;color: $hitam
+		}
+		.msg-new
+		{
+			color: $white3;font-size:9pt;margin-top:5px;width:150px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;
+		}
+	}
+	&.left
+	{
+		display:table;width:calc(100% - 19px);
+		.photo{display:table-cell;}
+		.user{display:table-cell;padding-left:10px;}
+	}
+	.msg
+	{
+		
+		.reply-msg
+		{
+			padding:5px;background:$white2;border:1px solid $white3;@include border-radius(10px 10px 0 0);cursor: pointer;margin-bottom:5px;
+			.img
+			{
+				width:50px;
+				img{width:100%;display:block;}
+			}
+		}
+		._img
+		{
+			width:calc(100% - 30px);margin-bottom:10px;padding:10px;border: 1px solid $white2;@include border-radius(5px);
+			img
+			{
+				width:calc(100% - 20px);display:block;height:auto;font-size: inherit;margin:auto;
+			}
+		}
+		position:relative;width:50%;display: inline-block;padding:10px 20px 10px 10px;vertical-align: top;color: $hitam;@include border-radius(5px);height:auto;@include box-shadow(3px 5px 15px $white3);
+		&._friend{padding: 10px 10px 10px 20px;}
+		
+		//button menampilkan aksi hapus dan edit pada chat
+		.button-msg
+		{
+			position: absolute;top:0;right:0;padding:10px;z-index: 1;
+			&:after{position:absolute;content:' ';width: 7px; height:7px; @include rotate(45deg);margin:auto;top:0;left:0;right:0;bottom:0;border-bottom:1px solid $white4;border-right: 1px solid $white4;}
+			&:hover{background: $white2}
+			&._friend:hover{background: $blue2}
+			&._friend{left:0;right:100%;}
+			&._friend:after{border-bottom-color:$white;border-right-color:$white;}
+		}
+		//_self :: merupakan class untuk pesan dari diri sendiri atau orang tersebut
+		&._self{
+			background:$white;margin-left:20px;
+			&:after{
+				position:absolute;content: " ";left:-7.5px;top:10px;width:15px;height:15px;background: $white;@include rotate(45deg);
+			}
+		}
+		//_friend :: merupakan class untuk pesan dari orang lain
+		&._friend{
+			background:$blue;margin-right:20px;color: $white2;border-color: $blue3;
+			.reply-msg { background:$blue2; }
+			&:after{
+				position:absolute;content: " ";right:-7.5px;top:10px;width:15px;height:15px;background: $blue;@include rotate(45deg);
+			}
+		}
+	}
+	
+	//jika pesan berasal dari orang lain maka class ".right" akan membuat element bergeser ke kanan
+	&.right .photo, &.right .msg{float:right;}
+}
+
+//button aksi hapus dan edit chat/pesan
+.action-msg
+{
+	position:absolute;width:150px;z-index: 5;max-height:0;overflow:hidden;background: $white;
+	._button
+	{
+		padding:10px;font-size: 10pt;position:relative;@include transition(.5s);background: transparent;cursor: default;
+		&:after
+		{
+			position:absolute;content: ' ';width:0;height:0;bottom:0;top:0;margin:auto;left:-10px;border-left: 5px solid $hitam; border-top: 5px solid transparent;border-bottom: 5px solid transparent;@include transition(.5s);
+		}
+		&:hover{padding-left:20px;background: $hitam-trans2;}
+		&:hover:after{left:10px;}
+	}
+	&.aktif{max-height: 500px;}
+}
+
+//element a-href pada contact user sebelah kiri (jika element a-href mempunyai class aktif)
+.aktif
+{
+	.contact._u
+	{
+		background: $green3;
+		&:hover
+		{
+			background: $green;
+			.name, .msg-new{color:$white}
+		}
+	}
+}
+
+.header
+{
+	background: $white;
+	border-bottom: 1px solid $white2; padding: 10px;text-align:center;height:40px;
+	.search
+	{
+		float:left;
+		input{display:inline-block;width:200px;padding:10px;@include border-radius(5px);border: 1px solid $white2}
+	}
+	.title
+	{
+		display:inline-block;@include translate(translateY(50%));font-weight:bold;
+	}
+	.contact-header
+	{
+		width:200px;top: 0%;float:right;text-align:left;position:relative;background:$white2;padding:10px;color:$hitam;cursor: default;
+		.photo
+		{
+			width:20px;float:left;margin-right:10px;border: 1px solid $white2;@include border-radius(100%);overflow:hidden;
+			img{display:block;width:100%;}
+		}
+		.name
+		{
+			vertical-align: middle;display:inline-block;
+		}
+		.option
+		{
+			margin-top:0px;background:$white2;overflow:hidden;max-height:0;@include transition(.2s);border-top: 1px solid transparent;position:absolute;top:100%;left:0;right:0;z-index: 1;
+			a
+			{
+				display:block;text-decoration: none !important;
+				.child
+				{
+					padding:10px;color:$hitam;position:relative;@include transition(.2s);
+					&:after{position:absolute;left:-10px;top:0;bottom:0;margin:auto;border-left:5px solid $hitam;border-top:5px solid transparent;border-bottom: 5px solid transparent;@include transition(.2s);content:" ";width:0;height:0;}
+				}
+				&:hover
+				{
+					.child:after{left:5px;}
+					.child{padding-left:20px;}
+				}
+			}
+		}
+		&:hover
+		{
+			.option{max-height:1000px;
+				border-top: 1px solid $white3;}
+		}
+	}
+}
+
+.section
+{
+	height:calc(100% - 60px);width:100%;
+}
+
+.chat
+{
+	height:100%;
+	margin-left: 25%;position:relative;
+	.inner-chat
+	{
+		padding:0 10px 0 10px;height: calc(100% - 10px);
+	}
+	.option
+	{
+		background: $white;text-align:right;padding:10px;
+		.button
+		{
+			width:20px;padding:5px; @include transition(.2s ease-in);background :transparent;display:inline-block;
+
+			img
+			{width:100%;display: block;
+				
+			}
+			&:hover
+			{
+				background: $white2;
+			}
+		}
+	}
+	.chat-wrap
+	{
+		height: calc(100% - 150px);overflow: auto;
+	}
+	/*
+		.form-send :: merupakan css untuk input PESAN
+	*/
+	.form-send
+	{
+		position:absolute;left:0;right:0;bottom:0;padding:5px 20px;height:90px;z-index: 1;
+
+		.form-send-inner
+		{
+			overflow: hidden;background: $white;height:100%;
+			.send-input
+			{
+				width:80%;border:none !important;resize: none;height:70%;padding:10px;outline: none !important;
+				@media only screen and (max-width: 790px) {
+					width: 75%;
+				}
+				@media only screen and (max-width: 680px) {
+					width: 70%;
+				}
+				@media only screen and (max-width: 570px) {
+					width: 65%;
+				}
+				@media only screen and (max-width: 500px) {
+					width: 60%;
+				}
+			}
+			textarea.send-input{font-family: 'Muli', sans-serif;}
+			.button
+			{
+				width:20px;padding:5px; @include transition(.2s ease-in);background :transparent;display:inline-block;
+
+				img
+				{width:100%;display: block;
+					
+				}
+				&:hover
+				{
+					background: $white2;
+				}
+				&._send
+				{
+					float:right;margin-right:15px;margin-top:32px;
+				}
+			}
+		}
+		.reply
+		{
+			position:absolute;top:0;bottom:0;left:20px;right:20px;background:$white;z-index: -1;@include transition(.5s);padding: 10px 20px;
+			.close
+			{
+				position:absolute;top:0;right:0;color:$hitam;font-size:9pt;cursor:default;padding:5px;
+				&:hover{background:$white2;}
+			}
+			.inner-reply
+			{
+				width:100%;height:100%;background:$white2;
+				.img
+				{
+					width:50px;
+					img{width:100%;display:block;}
+				}
+				.text
+				{
+					color:$hitam;padding:5px;
+				}
+			}
+			&.aktif{top:-100%;bottom:100%;}
+		}
+	}
+}
+
+
+/*
+	TOOL-TIP
+*/
+.tool-tip
+{
+	padding:10px;opacity:0;background: $hitam-trans5;@include transition(.5s);position:absolute;z-index: 2000;color: $white;
+	&.aktif{opacity:1;}
+}
+
+/*
+	Menu TAB
+*/
+.menu-tab
+{
+	border-bottom: 1px solid $white2;
+	.btn-tab
+	{
+		display: inline-block;padding:10px;color: $white;cursor: default;position:relative;
+		&:not(:last-child){border-right:1px solid $white2;}
+		
+		//jika menu tab-aktif atau ke klik
+		&.aktif:after
+		{
+			position:absolute;width:0;height:0;content: ' ';border-top:10px solid $white3; border-left: 10px solid transparent;border-right: 10px solid transparent;bottom:-11px;left:0;right:0;margin:auto;
+		}
+		&.aktif{background: $hitam-trans2;}
+	}
+}
+
+/*
+	Menu settings akun
+*/
+.settings-account
+{
+	position:fixed;z-index:2000;top:0;left:100%;bottom:10px;right:-100%;@include transition(.5s);background: transparent;
+	.inner-settings
+	{
+		margin: 71px 10px 0 25.255%;height:calc(100% - 71px);background:$white; @include border-radius(0 0 5px 0);border-left: 1px solid $white2;
+	}
+	&.aktif{left:0;right:0;background: $hitam-trans2;}
+}
+
+/*
+	Info Alert
+*/
+.alert
+{
+	position:absolute;color:$hitam;top:0;left:0;right:0;bottom:100%;z-index: 2100;@include transition(.5s);overflow:hidden;
+	.container-alert
+	{
+		margin:auto;color:$hitam;width:350px;height:250px;background:$white;top:0;left:0;right:0;bottom:0;position:absolute;
+		.alert-header
+		{
+			padding:10px;color:$white;
+			.inner-alert
+			{
+				display:table;width:100%;
+				.icon
+				{
+					display:table-cell;vertical-align:top;width:30px;
+					img{width:100%;display:block;}
+				}
+				.info
+				{
+					display:table-cell;width:200px;vertical-align:middle;padding-left:10px;
+				}
+				.close
+				{
+					width:10px;display:table-cell;vertical-align:middle;cursor:default;padding:5px;text-align:center;
+					&:hover{background:$hitam-trans2;}
+				}
+			}
+			&.error{background:$red;}
+			&.warning{background:$yellow2;}
+			&.success{background:$green;}
+		}
+		.body-alert{
+			font-size:10pt;height:calc(100% - 110px);padding:30px;position:relative;
+			.confirm
+			{
+				position:absolute;bottom:30px;left:30px;right:30px;
+				.button
+				{
+					background:$white2;border: none !important;padding:10px;
+					&:hover{background:$white3;}
+				}
+			}
+		}
+	}
+	
+	&.aktif
+	{
+		bottom:0;
+	}
+}
+
+/*
+	Kontak User sebelah kiri
+*/
+.show-msg
+{
+	display:block;overflow:hidden;@include transition(.5s);max-height:1000px;text-decoration: none;
+	&.hidden{max-height:0px;}
+}
+
+/*
+	Menu Preview Upload Photo / User
+*/
+.preview-photo
+{
+	z-index: 2000;top: 100%;left:0;right:0;bottom:-100%;position:fixed;@include transition(.5s);overflow:hidden;height:0;background:$white2;
+	.header
+	{
+		padding:5px 10px;font-size:16pt;font-weight:bold;background: $green;color:$white;text-align:left;vertical-align:middle;
+		.back
+		{
+			margin-right:10px;@include translate(translateY(10%));padding:10px 10px 10px 20px;position:relative;display:inline-block;font-size:10pt;background:$green2;cursor: pointer;
+			&:after{position:absolute;content:' ';width:0;height:0;margin:auto;top:0;bottom:0;left:5px;border-right:10px solid $hitam-trans2;border-top: 10px solid transparent;border-bottom: 10px solid transparent;}
+		}
+		span{@include translate(translateY(25%));display:inline-block;}
+	}
+	.content
+	{
+		padding:10px 50px;overflow:auto;height:calc(100% - 161px);
+		img
+		{
+			width:50%;display:block;margin:auto;
+		}
+	}
+	.form-preview{display:none;}
+	&.preview-send
+	{
+		/*
+		.form-send :: merupakan css untuk input PESAN di dalam PREVIEW PHOTO
+		*/
+		.form-preview
+		{
+			position:absolute;left:0;right:0;bottom:5px;height:60px;z-index: 1;display:block;
+
+			.form-preview-inner
+			{
+				text-align:right;background: transparent;height:100%;width:50%;margin:auto;margin-bottom:10px;
+				@media only screen and (max-width: 720px) {
+					width: 90%;
+				}
+				.preview-input
+				{
+					width:calc(100% - 100px);border:none;resize: none;padding:10px;outline: none !important;background:transparent;position:relative;border-bottom: 2px solid $green2;
+				}
+				textarea.preview-input{font-family: 'Muli', sans-serif;}
+				.button
+				{
+					width:20px;padding:5px; @include transition(.2s ease-in);background :transparent;display:inline-block;
+
+					img
+					{width:100%;display: block;
+						
+					}
+					&:hover
+					{
+						background: $white3;
+					}
+					&._send
+					{
+						display:inline-block;margin-right:15px;margin-top:12px;vertical-align: top;
+					}
+				}
+			}
+		}
+	}
+	&.aktif{height:100%;top:0;bottom:0;}
+}
+
+.forward
+{
+	position:fixed;z-index: -1;background: $white-trans;top:0;left:0;right:0;bottom:0;width:100%;height:100%;@include box-sizing(border-box);opacity:0;@include transition(.5s);
+	.inner
+	{
+		width:50%;height:60%;position:absolute;top:0;left:0;right:0;bottom:0;margin:auto;overflow:hidden;@include border-radius(5px);
+		.header
+		{
+			height:30px;font-size:18pt;font-weight:bold;background:$green4;color:$white;text-align:center;
+			span:first-child{float:left;font-weight:normal;padding-left:20px;cursor: pointer;padding-top:2px;}
+		}
+		.search
+		{
+			height:40px;padding:5px 10px;background:$white2;
+			.search-inner
+			{
+				padding:5px;background:$white;@include border-radius(5px);
+				&:after, &:before{content:"";display:table;}
+				&:after{clear:both;}
+				input{width:calc(100% - 40px);border: none !important;outline: none !important;padding-top:10px;}
+				.icon
+				{
+					width:30px;position:relative;float:left;height:30px;margin-right:10px;cursor: pointer;
+					&:after
+					{
+						content:'';position:absolute;width:10px;height:10px;margin:auto;top:0;left:0;bottom:0;right:0;background:$white;
+						@include border(3px solid $white2);
+						@include transition(.5s);
+						@include rotate(0deg);
+						@include border-radius(100%);
+					}
+					&:before
+					{
+						content:"";position:absolute;width:15px;height:3px;background:$white2;top:5px;bottom:0;left:10px;right:0;margin:auto;@include rotate(40deg);@include transition(.5s);
+					}
+				}
+				input:focus ~ .icon
+				{
+					&:after
+					{
+						width:5px;height:5px;right:5px;background:transparent;
+						border-top-color:transparent;border-right-color:transparent;
+						border-left-color:$green;border-bottom-color:$green;@include rotate(45deg);
+						@include border-radius(0);
+					}
+					&:before
+					{
+						@include rotate(0);left:0;top:0;background:$green;
+					}
+				}
+			}
+		}
+		.wrap
+		{
+			height: calc(100% - 100px);background:$white;overflow-x:hidden;overflow-y:scroll;
+			.title
+			{
+				padding:10px 20px;color:$green4;font-size: 16pt;
+			}
+			.wrap-inner
+			{
+				
+				.f-contact
+				{
+					position:relative;padding-left:75px;background:transparent;max-height:300px;@include transition(.2s);overflow: hidden;
+					.check
+					{
+						position:absolute;left:35px;top:0;bottom:0;margin:auto;width:15px;height:15px;border: 2px solid $white4;@include border-radius(5px);cursor: pointer;@include transition(.2s);
+						&:after
+						{
+							content:'';position:absolute;width:10px;height:5px;border-left: 3px solid transparent;border-bottom: 3px solid transparent;@include transition(.2s);@include rotate(-45deg);top:0;left:0;bottom:2px;right:0;margin:auto;
+						}
+						&.aktif
+						{
+							background:$green4;border-color:$green4;
+							&:after{border-left-color:$white;border-bottom-color:$white;}
+						}
+					}
+					.contact{background:transparent;}
+					&:hover
+					{
+						background:$white2;
+						.contact .name{color:$hitam}
+					}
+					&.hidden{max-height:0px;}
+				}
+			}
+		}
+		.wrap-send
+		{
+			position:absolute;right:0;left:0;bottom:-50px;background:$green5;padding:10px 100px 10px 10px;height:20px;@include transition(.5s);
+			.name-contact
+			{
+				color:$white;overflow: hidden;white-space: nowrap;
+			}
+			.send-forward
+			{
+				position:absolute;@include border-radius(100%);background:$green4;border: 1px solid $white;right:25px;top:0px;width:0;height:0;cursor: pointer;@include transition(.2s);
+				&:after,&:before
+				{
+					content:"";width:0;height:0;top:0;bottom:0;margin:auto;@include transition(.2s);
+				}
+				&:after
+				{
+					border-left: 0 solid $green4;border-top: 0 solid transparent;border-bottom: 0 solid transparent;position:absolute;left:0px;
+				}
+				&:before
+				{
+					border-left:0 solid $white;border-top: 0 solid transparent;border-bottom: 0 solid transparent;position:absolute;left:0;right:0;
+				}
+				&.aktif
+				{
+					width:50px;height:50px;top:-25px;right:10px;
+					&:after
+					{
+						border-left-width: 7px;border-bottom-width: 17px;border-top-width:17px;left:17px;
+					}
+					&:before
+					{
+						border-left-width: 15px;border-top-width: 15px;border-bottom-width:15px;
+					}
+				}
+			}
+			&.aktif
+			{
+				bottom:0;
+			}
+		}
+	}
+	&.aktif{z-index: 1500;opacity:1;}
+}
+
+.view-photo{cursor: pointer;}
+
+/*
+	_for- ... mentukan element title
+*/
+._for-title		{font-weight:bold;font-size:14pt;color:$white;}
+
+/*
+	d- ... mentukan panjang element
+*/
+.d-100	{width:100%;float:left;}
+.d-75	{width:75%;float:left;}
+.d-50	{width:50%;float:left;}
+.d-25	{width:25%;float:left;}
+
+
+/*
+	cur- ... merupakan bentuk / tipe display pada element
+*/
+.cur-p{cursor: pointer;}
+
+/*
+	dis- ... merupakan bentuk / tipe display pada element
+*/
+.dis-ib			{display: inline-block;}
+.dis-tab		{display: table;}
+.dis-tab_tc 	{display: table-cell;}
+.dis-tab_it 	{display: inline-table;}
+.dis-bl			{display: block;}
+.dis-none		{display: none;}
+
+.float-none		{float:none}
+.float-right	{float:right;}
+.float-left		{float:left;}
+
+/*
+	info- ... menampilkan pesan sesuai dengan nama class
+*/
+.info-error		{padding:10px;background: $red; color : $white; text-align:center;cursor: pointer;font-size:10pt;}
+.info-success	{padding:10px;background: $green; color : $white; text-align:center;cursor: pointer;font-size:10pt;}
+
+/*
+	font- ... menentukan jenis atau ukuran font
+*/
+.font-14	{font-size  : 14pt;}
+.font-b		{font-weight: bold;}
+
+
+/*
+	f-input- ... menentukan style input
+*/
+.f-input
+{
+	position:relative;
+	//form input tipe 1
+	&.t-1
+	{
+		color:$white4;
+		input
+		{
+			width:calc(100% - 20px);border: 1px solid $white2;padding:10px;background:$white;
+		}
+		label, span{position:absolute;@include translate(translateY(50%));left:10px;top:0;margin:auto;@include transition(.2s);}
+
+		//jika di saat input FOCUS
+		//atau jika di saat mengetik tidak sama dengan kosong / pas saat reload
+		input:focus ~ label, 
+		input:focus ~ span,
+		&.aktif label,
+		&.aktif span
+		{
+			@include translate(translateY(-150%)); font-size: 9pt;
+		}
+		&.black
+		{
+			input{background: transparent;}
+		}
+	}
+}
+
+/*
+	h- ... menentukan tinggi element
+*/
+.h-100	{height:100%;}
+.h-50	{height:50%;}
+
+/*
+	h- ... menentukan padding element
+*/
+.pad-10		{padding:10px;}
+.pad-20		{padding:20px;}
+.pad-30		{padding:30px;}
+.pad-t-10	{padding-top:10px;}
+.pad-t-20	{padding-top:20px;}
+.pad-t-30	{padding-top:30px;}
+.pad-b-10	{padding-bottom:10px;}
+.pad-b-20	{padding-bottom:20px;}
+.pad-b-30	{padding-bottom:30px;}
+
+
+/*
+	of- ... menentukan overflow element
+*/
+.of-hid		{overflow: hidden;}
+
+/*
+	text- ... menentukan text tipe element
+*/
+.text-center{text-align:center;}
+.text-left  {text-align:left;}
+.ver-mid	{vertical-align: middle;}
+
+/*
+	btn- ... menentukan tipe button element
+*/
+.btn	
+{
+	display: inline-block;border: none !important;padding:10px 30px;font-size:11pt;cursor: default;
+	&.green
+	{
+		background: $green;color: $white;
+		&:hover{background: $green2;}
+	}
+	&.red
+	{
+		background: $red;color: $white;
+		&:hover{background: $red2;}
+	}
+	&.blue
+	{
+		background: $blue;color: $white;
+		&:hover{background: $blue2;}
+	}
+}
+
+/*
+	bg- ... menentukan background element
+*/
+.bg-white			{background-color: $white;}
+.bg-white2			{background-color: $white2;}
+.bg-trans2-black 	{background: rgba(0,0,0, .2);}

@@ -1,0 +1,77 @@
+$white        : #FFFFFF;
+$white2       : #ecf0f1;
+$white3       : #bdc3c7;
+$white4       : #7f8c8d;
+$green        : #2ecc71;
+$green2       : #27ae60;
+$green3       : rgba(39, 174, 96, .1);
+$green4       : #1abc9c;
+$green5       : #10ac84;
+$red          : #e74c3c;
+$red2         : #c0392b;
+$hitam        : #34495e;
+$hitam2       : #2c3e50;
+$blue         : #3498db;
+$blue2        : #2980b9;
+$blue3        : #0652DD;
+$yellow       : #f1c40f;
+$yellow2      : #f39c12;
+$white-trans  : rgba(255,255,255, .3);
+$hitam-trans2 : rgba(0,0,0, .2);
+$hitam-trans5 : rgba(0,0,0, .5);
+
+@mixin border-radius($radius...) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    -o-border-radius: $radius;
+    border-radius: $radius;
+}
+
+@mixin transition($transition...) {
+    -webkit-transition: $transition;
+    -moz-transition: $transition;
+    -ms-transition: $transition;
+    -o-transition: $transition;
+    transition: $transition;
+}
+
+@mixin box-shadow($shadow...) {
+    -webkit-box-shadow: $shadow;
+    -moz-box-shadow: $shadow;
+    -ms-box-shadow: $shadow;
+    -o-box-shadow: $shadow;
+    box-shadow: $shadow;
+}
+
+@mixin rotate($rotate...) {
+    -webkit-transform: rotate($rotate);
+    -moz-transform: rotate($rotate);
+    -ms-transform: rotate($rotate);
+    -o-transform: rotate($rotate);
+    transform: rotate($rotate);
+}
+
+@mixin border($border...)
+{
+    border-left: $border;
+    border-right: $border;
+    border-bottom: $border;
+    border-top: $border;
+}
+
+@mixin translate($translate...) {
+    -webkit-transform: $translate;
+    -moz-transform: $translate;
+    -ms-transform: $translate;
+    -o-transform: $translate;
+    transform: $translate;
+}
+
+@mixin box-sizing($box-sizing...) {
+    -webkit-box-sizing: $box-sizing;
+    -moz-box-sizing: $box-sizing;
+    -ms-box-sizing: $box-sizing;
+    -o-box-sizing: $box-sizing;
+    box-sizing: $box-sizing;
+}
