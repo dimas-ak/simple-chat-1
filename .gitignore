@@ -7,7 +7,7 @@ application/logs/*
 !application/logs/index.html
 
 !application/*/.htaccess
-.vscode
+.vscode/*
 composer.lock
 
 user_guide_src/build/*
